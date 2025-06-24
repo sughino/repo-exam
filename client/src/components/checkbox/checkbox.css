@@ -1,0 +1,15 @@
+@import url('../../index.css');
+.checkbox-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--gap);
+    user-select: none;
+    align-items: center;
+}
+.checkbox{
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

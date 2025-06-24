@@ -1,0 +1,75 @@
+@import url(../../index.css);
+.landing-wrapper {
+    inset: 1;
+    height: 95vh;
+    padding-inline: min(5em, 8%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.BlurText {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+    user-select: none;
+    pointer-events: auto;
+}
+.BlurName {
+    margin: 0;
+    font-weight: 200;
+    text-align: center;
+    font-size: 1.5625rem;
+    user-select: none;
+    pointer-events: auto;
+}
+
+.animated-landing-container {
+    width: 100%;
+    padding-inline: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-2);
+}
+.animated-landing-button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-2);
+}
+
+.landing-chevronIcon-container {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (min-width:600px) {
+    .BlurText {
+        font-size: 4.712875rem
+    }
+    .BlurName {
+        font-size: 1.821875rem;
+    }
+}
+@media (min-width:900px) {
+    .BlurText {
+        font-size: 5.355625rem
+    }
+    .BlurName {
+        font-size: 2.0243125rem;
+    }
+    .animated-landing-container {
+        width: 60vw;
+    }
+}
+@media (min-width:1200px) {
+    .BlurText {
+        font-size: 5.9983125rem
+    }
+}

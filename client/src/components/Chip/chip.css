@@ -1,0 +1,15 @@
+@import url("../../index.css");
+
+.chip-wrapper {
+    width: fit-content;
+    padding: 10px;
+    padding-inline: 15px;
+    background: var(--white-10);
+    border: 2px solid var(--white-10);
+    border-radius: 100px;
+    cursor: pointer;
+    user-select: none;
+}
+.chip-wrapper:hover {
+    background: var(--white-30);
+}

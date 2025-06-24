@@ -1,0 +1,91 @@
+.login-wrapper {
+    width: 100vw;
+    background: var(--black);
+    padding: 20px;
+    overflow: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+.login-wrapper::-webkit-scrollbar, .register-form::-webkit-scrollbar {
+  width: 0px;
+}
+
+.login-form-container {
+    width: 100%;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--gap-3);
+}
+.register-form {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.clickable-login-text {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.login-text-wrapper {
+    width: 100%;
+    position: relative;
+    text-align: center;
+}
+.turn-back-login-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.login-radio-button {
+    width: 100%;
+    background: var(--white-10);
+    border-radius: var(--radius);
+    border: solid 2px var(--white-10);
+    justify-content: center;
+    padding-block: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+.login-radio-button-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-radio-button:active > .login-radio-button-inner {
+    scale: 0.95;
+}
+.login-radio-button:hover {
+    background: var(--white-20);
+}
+
+.login-radio-button.active {
+    background: var(--white);
+    border: solid 2px var(--black-10);
+    color: var(--black);
+}
+
+@media (min-width:600px) {
+    .login-wrapper {
+        width: 500px;
+        border-radius: 30px;
+        border: solid 2px var(--white-10);
+    }
+    .register-form {
+        max-height: 85dvh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+@media (max-width: 600px) {
+    .login-wrapper {
+      height: 100dvh !important;
+    }
+}

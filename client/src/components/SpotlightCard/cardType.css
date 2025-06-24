@@ -1,0 +1,79 @@
+@import url('../../index.css');
+.main-card {
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 20px;
+    text-wrap: nowrap;
+    position: relative;
+}
+.card-button-container {
+    display: flex;
+    gap: var(--gap);
+    margin-top: 10px;
+}
+
+.card-content-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+.card-ellipsis {
+    max-width: 350px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-capitalized {
+    text-transform: capitalize;
+}
+
+.card-top-content-container, .registry-data-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content-container-horizontal {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    flex-wrap: wrap;
+}
+.card-content-container-horizontal.larger {
+    gap: var(--gap-3);
+} 
+.card-content-container-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+.card-bottom-content-container {
+    display: flex;
+    gap: var(--gap-2);
+}
+
+.admin-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: var(--white-10);
+    border-radius: 10px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+@media (min-width:600px) {
+    .main-card {
+        min-width: 420px;
+    }
+}

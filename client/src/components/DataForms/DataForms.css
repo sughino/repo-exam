@@ -1,0 +1,65 @@
+@import url('../../index.css');
+.form-container {
+    width: 100vw; 
+    background: var(--black);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3);
+    height: 100dvh;
+    overflow-y: scroll;
+}
+.form-container::-webkit-scrollbar {
+  width: 0px;
+}
+
+.inner-form-container-split {
+    width: 100%;
+}
+.inner-form-container-flex {
+    position: relative;
+    display: flex;
+    gap: var(--gap);
+    will-change: contents;
+}
+.inner-form-container-flex.row {
+    flex-direction: row;
+}
+.inner-form-container-flex.col {
+    flex-direction: column;
+}
+.inner-form-container-flex.space {
+    width: 100%;
+    justify-content: space-between;
+}
+.inner-form-container-flex.right {
+    width: 100%;
+    justify-content: flex-end;
+}
+.inner-form-container-flex.center {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.inner-form-container-flex.vertical-center {
+    align-items: center;
+}
+
+@media (min-width:800px) {
+    .form-container {
+        width: 700px; 
+    }
+}
+@media (min-width:600px) {
+    .form-container {
+        height: auto;
+        overflow: hidden;
+        border-radius: 30px;
+        border: solid 2px var(--white-10);
+        max-height: 85dvh;
+        overflow-y: auto;
+    }
+    .inner-form-container-split {
+        width: 50%;
+    }
+}

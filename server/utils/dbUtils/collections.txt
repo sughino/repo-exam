@@ -1,0 +1,30 @@
+// Collection "User"
+{
+  "_id": ObjectId(),
+  "email": String, //unique
+  "name": String,
+  "Surname": String,
+  "passwordLenght": Number,
+  "password": String,
+  "admin": bool
+}
+
+// Collection "PersonalData"
+{
+  "_id": ObjectId(),
+  "address": String,
+  "city": String,
+  "province": String,
+  "phoneNumber": String,
+  "note": String, // optional
+}
+
+// Collection "Delivery"
+{
+  "_id": ObjectId(),
+  "withdrawalDate": Date,
+  "deliveryDate": Date,
+  "state": String,
+  "keyDelivery": String, // unique
+  "personalDataId": ObjectId() // riferimento diretto all'ObjectId
+}

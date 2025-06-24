@@ -1,0 +1,13 @@
+@import url("../../index.css");
+.pageError-container {
+    width: 100vw;
+    height: 100dvh;
+    user-select: none;
+    gap: var(--gap-2);
+}
+.pageError-container, .pageError-text-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

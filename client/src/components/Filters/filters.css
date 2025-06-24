@@ -1,0 +1,216 @@
+@import url('../../index.css');
+
+.filters-main-container {
+    display: flex;
+    width: 100%;
+    gap: var(--gap-3);
+    min-height: 35px;
+    flex-wrap: wrap-reverse;
+    position: relative;
+}
+
+.filters-orderby-main {
+    display: flex;
+    gap: var(--gap-2);
+    align-items: center;
+}
+.filters-orderby-inputs {
+    display: flex;
+    gap: 0;
+}
+
+.sort-icon-container, .typeof-icon-container {
+    height: 35px;
+    min-width: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .3s var(--main-animation);
+}
+.sort-icon-container {
+    background: var(--white-30);
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+.sort-icon-container:hover {
+    background: var(--white-20);
+}
+.typeof-icon-container:hover, .filters-search-input:hover {
+    background: var(--white-30) !important;
+}
+.sort-icon-container:active > .icon-feedback-wrapper {
+    scale: .95;
+}
+.typeof-icon-container:active > .icon-feedback-wrapper {
+    scale: .95;
+}
+
+.filters-typeof-container {
+    height: 35px;
+    width: calc(35px * 2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+}
+
+.icon-feedback-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filters-search-container {
+    position: relative;
+    height: 35px;
+    width: 100%;
+}
+.filters-search-input {
+    outline: none;
+    border: none;
+    height: 100%;
+    width: 100%;
+    background: var(--white-20);
+    transition: background .3s var(--main-animation);
+    border-radius: var(--radius);
+    color: var(--white);
+    padding-left: 15px;
+    padding-right: calc(10px + 22px + 15px);
+    font-size: 16px;
+}
+.icon-search-wrapper {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
+.filters-text {
+    display: none;
+}
+
+/*modal filters settings*/
+.modal-filter-wrapper {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.modal-filters-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2);
+}
+.modal-filters-chip-container {
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+}
+.modal-filters-button {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white-20);
+    transition: background .3s var(--main-animation);
+    border-radius: var(--radius);
+    color: var(--white);
+    cursor: pointer;
+}
+.modal-filters-button.loading {
+    background: none !important;
+}
+.modal-filters-button:hover {
+    background: var(--white-30);
+}
+.modal-filters-inner-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap);
+    transition: scale .1s var(--main-animation);
+}
+.modal-filters-button:active > .modal-filters-inner-button-container {
+    scale: .95;
+}
+
+.modal-filters-container {
+    position: absolute;
+    top: 0px;
+    right: -10px;
+    width: calc(100dvw - 20px);
+    height: 55dvh;
+    background: var(--border-color);
+    z-index: 10;
+    border-radius: 20px;
+    padding: 10px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.modal-filters-input-container {
+    display: inherit;
+    flex-direction: inherit;
+    gap: var(--gap);
+}
+.reset-text-container {
+    cursor: pointer;
+}
+
+.modal-filters-text-wrapper {
+    display: flex;
+    gap: var(--gap);
+    align-items: center;
+}
+.turn-back-modal-filters-button {
+    height: fit-content;
+    width: fit-content;
+    display: block;
+}
+
+@media (min-width:900px) {
+    .filters-search-input {
+        width: 300px;
+    }
+    .turn-back-modal-filters-button {
+        display: none;
+    }
+    .filters-search-container {
+        width: auto;
+    }
+
+    .filters-text {
+        display: block;
+    }
+
+    /*modal filters settings*/
+    .modal-filters-button {
+        width: auto;
+        padding-inline: 15px;
+    }
+    .modal-filters-container {
+        top: 50px;
+        right: 0;
+        width: 500px;
+        border-radius: 20px;
+    }
+}
+
+/*@media (max-height:700px) {
+    .modal-filters-container {
+        top: 50px;
+        right: 0;
+        width: 500px;
+        height: 30dvh;
+        border-radius: 20px;
+        background: red;
+    }
+}*/
