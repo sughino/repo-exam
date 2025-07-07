@@ -16,13 +16,16 @@ import { Dialog } from "../../components/dialog";
 import socket from "../../utils/socket";
 import { useRoutes } from "../../context/RoutesContext" 
 import './DataPage.css';
+import { SettingsFilter } from "../../components/Filters/settingsFilter";
 
 export const Users = () => {
     let location = useLocation().pathname.substring(1);
     const routes = useRoutes();
     const theme = useContext(ThemeContext);
     const userLength = localStorage.getItem('userLength');
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const [isTable, setIsTable] = useState(false);
     const [searchedText, setSearchedText] = useState('');
@@ -34,8 +37,8 @@ export const Users = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const searchForPlaceholder = "Search by name and surname"
-    const filtersSelect = ['User id', 'Name & Surname', 'Email', 'Admin']
+    const searchForPlaceholder = "Search by name and surname";
+    const filtersSelect = ['User id', 'Name & Surname', 'Email', 'Admin'];
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -102,6 +105,7 @@ export const Users = () => {
     //TODO il filtro da una data all'altra, il secondo parametro bisogna farlo sul giorno dopo, quindi se si va dal 2025/05/16 al 2025/05/20 il filtro andra fino al 2025/05/21 00:00
     //TODO VELOCE aggiungere la data di registrazione alle card degli studenti
 
+    //<UserFiltersModal isOpen={isModalFiltersOpen} onSubmit={setFilters} onCLose={() => {setIsModalFiltersOpen(false)}}/>
     return (
         <>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -127,47 +131,50 @@ export const Users = () => {
                 <Spacer height={theme.sizes.gap3}/>
                 
                 {/*<LoadingFilters/>*/}
-                <Filters onGroupBy={setFilters} filtersSelect={filtersSelect} searchForPlaceholder={searchForPlaceholder} onSelect={setIsTable} onSearchedText={setSearchedText} onSortBy={setSortBy} onFiltersBy={setFilterText}/>
+                <Filters onGroupBy={setFilters} filtersSelect={filtersSelect} searchForPlaceholder={searchForPlaceholder} onSelect={setIsTable} onSearchedText={setSearchedText} onSortBy={setSortBy} onFiltersBy={setFilterText} onOpenFilters={() => {setIsSettingsOpen(true)}} />
                 <Spacer height={theme.sizes.gap3}/>
                 {
-                isError ?
-                    <div className="error-handler">
-                        <Text variant={'h1'} color={theme.colors.black50}>{ isError?.response?.data?.message || 'An error occurred'}</Text>
-                    </div>
+                isSettingsOpen ?
+                    <SettingsFilter onCloseSettings={() => {setIsSettingsOpen(false)}} onSubmit={(e) => {console.log(e)}}/>
                 :
-                    users.length === 0 && !isLoading ? 
+                    isError ?
                         <div className="error-handler">
-                            <Text variant={'h1'} color={theme.colors.black50}>{searchedText.length > 1 ? 'No results found' : 'Add a new user'}</Text>
+                            <Text variant={'h1'} color={theme.colors.black50}>{ isError?.response?.data?.message || 'An error occurred'}</Text>
                         </div>
                     :
-                        <div className={`data-container-scroll ${isTable ? 'table': 'card'}`}>
-                            {
-                            isTable ?
-                                <TableTemplate data={users} />
-                            :
-                                <div className="data-container card">
-                                    {isLoading ? (
-                                        Array.from({ length: userLength || 6 }).map((_, index) => (
-                                            <Skeleton key={index} variant="rectangle" width={'100%'} height={259} sx={{ bgcolor: theme.colors.white05, borderRadius: '20px' }}/>
-                                        ))
-                                    ) : (
-                                        users.map((s) => (
-                                            <UserCard
-                                                key={s._id}
-                                                _id={s._id}
-                                                name={s.name}
-                                                surname={s.surname}
-                                                email={s.email}
-                                                admin={s.admin}
-                                                regDate={s.regDate}
-                                                onDelete={(userData) => {setSelectedUser(userData);setIsDeleting(true);setIsModalOpen(true);}}
-                                                onModify={(userData) => {setSelectedUser(userData);setIsEditing(true);setIsModalOpen(true);}}
-                                            />
-                                        ))
-                                    )}
-                                </div>
-                            }
-                        </div>
+                        users.length === 0 && !isLoading ? 
+                            <div className="error-handler">
+                                <Text variant={'h1'} color={theme.colors.black50}>{searchedText.length > 1 ? 'No results found' : 'Add a new user'}</Text>
+                            </div>
+                        :
+                            <div className={`data-container-scroll ${isTable ? 'table': 'card'}`}>
+                                {
+                                isTable ?
+                                    <TableTemplate data={users} />
+                                :
+                                    <div className="data-container card">
+                                        {isLoading ? (
+                                            Array.from({ length: userLength || 6 }).map((_, index) => (
+                                                <Skeleton key={index} variant="rectangle" width={'100%'} height={259} sx={{ bgcolor: theme.colors.white05, borderRadius: '20px' }}/>
+                                            ))
+                                        ) : (
+                                            users.map((s) => (
+                                                <UserCard
+                                                    key={s._id}
+                                                    _id={s._id}
+                                                    name={s.name}
+                                                    surname={s.surname}
+                                                    email={s.email}
+                                                    admin={s.admin}
+                                                    regDate={s.regDate}
+                                                    onDelete={(userData) => {setSelectedUser(userData);setIsDeleting(true);setIsModalOpen(true);}}
+                                                    onModify={(userData) => {setSelectedUser(userData);setIsEditing(true);setIsModalOpen(true);}}
+                                                />
+                                            ))
+                                        )}
+                                    </div>
+                                }
+                            </div>
                 }
             </div>
         </>

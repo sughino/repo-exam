@@ -14,7 +14,7 @@ import { DateField } from "../inputsField";
 import { Chip } from "../Chip";
 import { format } from "date-fns";
 
-export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
+export const SettingsFilter = ({onCloseSettings, onSubmit, onCLose}) => {
     const theme = useContext(ThemeContext);
 
     const formikRef = useRef();
@@ -37,6 +37,7 @@ export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
     }, [reset])
 
     useEffect(() => {
+        formikRef.current?.resetForm();
         setChangedElement({
             dateRange: false,
             role: false,
@@ -44,10 +45,6 @@ export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
         setIsChanged(false);
         setReset(false);
     }, [])
-
-    useEffect(() => {
-        if (isOpen) formikRef.current?.resetForm();
-    }, [isOpen])
     
     useEffect(() => {
         const currentValues = formikRef.current?.values;
@@ -67,20 +64,6 @@ export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
         setIsChanged(isDateChanged || isRoleSelected);
     }, [formikRef.current?.values, selectedItem]);//TODO ESAME aggiungi nell'hook tutto ciò che vuoi vedere quando cambia
 
-    const filtersVariants = {
-        close: { 
-            y: -15,
-            opacity: 0,
-            scale: .8,
-            display: 'none'
-        },
-        open: {
-            scale: 1,
-            y: 0,
-            opacity: 1,
-            display: 'flex'
-        }
-    }
     //TODO sistema tutto questo codice, non cambia immediatamente il change delle date, sistema le chip
 
     const handleReset = () => {
@@ -116,20 +99,11 @@ export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
         startDate: "",
         endDate: "",
     };
-    //TODO guarda proprietà framer mortion tipo layout
 
     return (
-        <motion.div 
-            className="modal-filters-container"
-            variants={filtersVariants}
-            initial={"close"}
-            animate={isOpen ? "open" : "close"}
-            transition={theme.transition.main}
-        >
+        <div className="setting-filters-container">
             <div className="modal-filters-text-wrapper">
-                <div className="turn-back-modal-filters-button">
-                    <Button onlyicon={true} size={'big'} noBorder={true} iconName={'arrow-left-from-line'} onClick={(e) => {e.preventDefault();onCLose()}}/>
-                </div>
+                <Button onlyicon={true} size={'big'} noBorder={true} iconName={'arrow-left-from-line'} onClick={(e) => {e.preventDefault();onCloseSettings()}}/>
                 <Text variant={'h6'}>Filter</Text>
             </div>
             
@@ -217,6 +191,6 @@ export const UserFiltersModal = ({isOpen, onSubmit, onCLose}) => {
                     </Form>
                 )}
             </Formik>
-        </motion.div>
+        </div>
     )
 }

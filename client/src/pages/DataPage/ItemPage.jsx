@@ -1,5 +1,5 @@
 import { TableTemplate } from "../../components/TableTemplate";
-import { Card } from "../../components/SpotlightCard";
+import { UserCard } from "../../components/SpotlightCard";
 import { Skeleton } from '@mui/material';
 import { ThemeContext } from "styled-components";
 import { useContext, useEffect, useState } from "react";
@@ -146,7 +146,7 @@ export const ItemPage = () => {
                                         ))
                                     ) : (
                                         users.map((s) => (
-                                            <Card
+                                            <UserCard
                                                 key={s._id}
                                                 _id={s._id}
                                                 name={s.name}

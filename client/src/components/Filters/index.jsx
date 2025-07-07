@@ -2,11 +2,9 @@ import Text from "../Text";
 import { Select } from "../Select";
 import './filters.css';
 import { Icon } from "../Icon";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "styled-components";
 import { Skeleton } from '@mui/material';
-import { UserFiltersModal } from "./filtersModal";
-import { useClickOutside } from "react-haiku";
 
 /*const filters = {
   Users: ['User id', 'Name & Surname', 'Email', 'Admin'],
@@ -19,32 +17,26 @@ const searchForPlaceholder = {
   PersonalData: 'Search by address',
   Deliveries: 'Search for key delivery',
 }*/
-export const Filters = ({filtersSelect, searchForPlaceholder, onSelect, onSearchedText, onSortBy, onFiltersBy, onGroupBy}) => {
-
+export const Filters = ({
+  filtersSelect,
+  searchForPlaceholder,
+  onSelect,
+  onSearchedText,
+  onSortBy,
+  onFiltersBy,
+  onOpenFilters
+}) => {
   const theme = useContext(ThemeContext);
   const [sortingDesc, setSortingDesc] = useState(false);
   const [typeOfSelected, setTypeOfSelected] = useState(1);
   const [searchedText, setSearchedText] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
 
-  const [isModalFiltersOpen, setIsModalFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState({});
-  const modalFiltersRef = useRef(null);
-
-  const handleClickOutside = () => {
-    setIsModalFiltersOpen(false);
-  };
-  useClickOutside(modalFiltersRef, handleClickOutside);
-
   useEffect(() => {
     onSelect(false);
     onSortBy(sortingDesc);
     onFiltersBy(selectedItem);
   }, []);
-
-  useEffect(() => {
-    onGroupBy(filters);
-  }, [filters])
 
   useEffect(() => {
     onFiltersBy(selectedItem);
@@ -115,8 +107,8 @@ export const Filters = ({filtersSelect, searchForPlaceholder, onSelect, onSearch
           </div>
       </div>
 
-      <div className="modal-filter-wrapper" ref={modalFiltersRef}>
-        <div className="modal-filters-button" onClick={() => {setIsModalFiltersOpen(!isModalFiltersOpen)}}>
+      <div className="modal-filter-wrapper">
+        <div className="modal-filters-button" onClick={() => {onOpenFilters()}}>
             <div className="modal-filters-inner-button-container">
                 <div className="filters-text">
                     <Text variant={'subtitle'}>Filter</Text>
@@ -124,7 +116,6 @@ export const Filters = ({filtersSelect, searchForPlaceholder, onSelect, onSearch
                 <Icon name={'settings-2'} size={22} />
             </div>
         </div>
-        <UserFiltersModal isOpen={isModalFiltersOpen} onSubmit={setFilters} onCLose={() => {setIsModalFiltersOpen(false)}}/>
       </div>
     </div>
   )

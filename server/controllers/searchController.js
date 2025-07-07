@@ -1,7 +1,7 @@
 import appError from "../utils/appError.js";
 import * as Yup from "yup";
 import { deliveryColl, personalDataColl } from "../utils/collections.js";
-import { addDays, parse, startOfDay } from "date-fns";
+import { addDays, parse, startOfDay, format } from "date-fns";
 
 const options = {
     projection: {_id: 0},
@@ -65,6 +65,8 @@ export async function getDelivery(req, res, next) {
 
         const result = {
             ...deliveryData,
+            withdrawalDate: format(deliveryData.withdrawalDate, 'yyyy-MM-dd'),
+            deliveryDate: format(deliveryData.deliveryDate, 'yyyy-MM-dd'),
             personalData: personalData
         };
         delete result.personalDataId;
