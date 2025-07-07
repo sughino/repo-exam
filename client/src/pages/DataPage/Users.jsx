@@ -16,7 +16,6 @@ import { Dialog } from "../../components/dialog";
 import socket from "../../utils/socket";
 import { useRoutes } from "../../context/RoutesContext" 
 import './DataPage.css';
-import { SettingsFilter } from "../../components/Filters/settingsFilter";
 
 export const Users = () => {
     let location = useLocation().pathname.substring(1);
@@ -25,7 +24,6 @@ export const Users = () => {
     const userLength = localStorage.getItem('userLength');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const [isTable, setIsTable] = useState(false);
     const [searchedText, setSearchedText] = useState('');
@@ -131,12 +129,9 @@ export const Users = () => {
                 <Spacer height={theme.sizes.gap3}/>
                 
                 {/*<LoadingFilters/>*/}
-                <Filters onGroupBy={setFilters} filtersSelect={filtersSelect} searchForPlaceholder={searchForPlaceholder} onSelect={setIsTable} onSearchedText={setSearchedText} onSortBy={setSortBy} onFiltersBy={setFilterText} onOpenFilters={() => {setIsSettingsOpen(true)}} />
+                <Filters onGroupBy={setFilters} filtersSelect={filtersSelect} searchForPlaceholder={searchForPlaceholder} onSelect={setIsTable} onSearchedText={setSearchedText} onSortBy={setSortBy} onFiltersBy={setFilterText} />
                 <Spacer height={theme.sizes.gap3}/>
                 {
-                isSettingsOpen ?
-                    <SettingsFilter onCloseSettings={() => {setIsSettingsOpen(false)}} onSubmit={(e) => {console.log(e)}}/>
-                :
                     isError ?
                         <div className="error-handler">
                             <Text variant={'h1'} color={theme.colors.black50}>{ isError?.response?.data?.message || 'An error occurred'}</Text>

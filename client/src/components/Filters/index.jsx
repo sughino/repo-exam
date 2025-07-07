@@ -106,17 +106,6 @@ export const Filters = ({
             <Icon name={'search'} size={22}/>
           </div>
       </div>
-
-      <div className="modal-filter-wrapper">
-        <div className="modal-filters-button" onClick={() => {onOpenFilters()}}>
-            <div className="modal-filters-inner-button-container">
-                <div className="filters-text">
-                    <Text variant={'subtitle'}>Filter</Text>
-                </div>
-                <Icon name={'settings-2'} size={22} />
-            </div>
-        </div>
-      </div>
     </div>
   )
 }
