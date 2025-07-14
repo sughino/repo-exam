@@ -39,7 +39,7 @@ export async function login(req, res, next) {
         const token = generateToken(tokenPayload);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Solo HTTPS in produzione
+            secure: true,
             sameSite: 'Strict',
             maxAge: 1000 * 60 * 30,
         });
@@ -47,7 +47,7 @@ export async function login(req, res, next) {
         const refreshToken = generateRefreshToken(tokenPayload, userData.remainConnected);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Solo HTTPS in produzione
+            secure: true,
             sameSite: 'Strict',
             maxAge: userData.remainConnected ? 1000 * 60 * 60 * 24 * 30 : 1000 * 60 * 60 * 30,
         });
@@ -116,14 +116,14 @@ export async function register(req, res, next) {
         const token = generateToken(tokenPayload);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
             sameSite: 'Strict',
             maxAge: 1000 * 60 * 60 * 24
         });
         const refreshToken = generateRefreshToken(tokenPayload, false);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Solo HTTPS in produzione
+            secure: true,
             sameSite: 'Strict',
             maxAge: 1000 * 60 * 60 * 30,
         });

@@ -39,7 +39,7 @@ export async function refreshToken(req, res) {
             const newToken = generateToken(user);
             res.cookie('token', newToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: true,
                 sameSite: 'Strict',
                 maxAge: 1000 * 60 * 30,
             });
