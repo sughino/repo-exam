@@ -22,9 +22,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.NODE_ENV === 'production'
-            ? process.env.FRONTEND_URL_PROD
-            : process.env.FRONTEND_URL_DEV,
+        origin: process.env.FRONTEND_URL_DEV,
         methods: ['POST', 'PUT', 'DELETE'],
         credentials: true
     }
