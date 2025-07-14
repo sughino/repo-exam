@@ -40,7 +40,7 @@ export async function login(req, res, next) {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             maxAge: 1000 * 60 * 30,
         });
 
@@ -48,7 +48,7 @@ export async function login(req, res, next) {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             maxAge: userData.remainConnected ? 1000 * 60 * 60 * 24 * 30 : 1000 * 60 * 60 * 30,
         });
 
@@ -117,14 +117,14 @@ export async function register(req, res, next) {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             maxAge: 1000 * 60 * 60 * 24
         });
         const refreshToken = generateRefreshToken(tokenPayload, false);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             maxAge: 1000 * 60 * 60 * 30,
         });
 

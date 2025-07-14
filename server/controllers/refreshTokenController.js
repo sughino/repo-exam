@@ -40,7 +40,7 @@ export async function refreshToken(req, res) {
             res.cookie('token', newToken, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'Strict',
+                sameSite: 'None',
                 maxAge: 1000 * 60 * 30,
             });
 
