@@ -23,8 +23,7 @@ export const Filters = ({
   onSelect,
   onSearchedText,
   onSortBy,
-  onFiltersBy,
-  onOpenFilters
+  onFiltersBy
 }) => {
   const theme = useContext(ThemeContext);
   const [sortingDesc, setSortingDesc] = useState(false);

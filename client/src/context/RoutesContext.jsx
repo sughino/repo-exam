@@ -4,7 +4,6 @@ const GeneralPage = lazy(() => import('../pages/GeneralPage'));
 const Users = lazy(() => import('../pages/DataPage/Users').then(m => ({ default: m.Users })));
 const ItemPage = lazy(() => import('../pages/DataPage/ItemPage').then(m => ({ default: m.ItemPage })));
 const OtherItemPage = lazy(() => import('../pages/DataPage/OtherItemPage').then(m => ({ default: m.OtherItemPage })));
-const UserProfile = lazy(() => import('../pages/UserProfile').then(m => ({ default: m.UserProfile })));
 
 import { LoadingDataPage } from '../pages/LoadingPages/LoadingDataPage';
 import { LoadingGeneralPage } from '../pages/LoadingPages/LoadingGeneralPage';
@@ -54,15 +53,6 @@ const routeList = Object.freeze([
     icon: 'truck',
     label: 'Other item page',
     loader: <LoadingDataPage />
-  },
-  {
-    name: 'userProfile',
-    path: '/profile',
-    component: UserProfile,
-    visibleTo: ['user'],
-    icon: 'user-round-cog',
-    label: 'Manage account',
-    loader: null
   }
 ]);
 

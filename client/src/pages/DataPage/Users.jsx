@@ -97,13 +97,6 @@ export const Users = () => {
         };
     }, [mutate]);
 
-    //TODO creare chips
-    //TODO convertire le date in date nel db e nel back-end,
-    //TODO eseguire le query sulle date da oggi al giorno dopo
-    //TODO il filtro da una data all'altra, il secondo parametro bisogna farlo sul giorno dopo, quindi se si va dal 2025/05/16 al 2025/05/20 il filtro andra fino al 2025/05/21 00:00
-    //TODO VELOCE aggiungere la data di registrazione alle card degli studenti
-
-    //<UserFiltersModal isOpen={isModalFiltersOpen} onSubmit={setFilters} onCLose={() => {setIsModalFiltersOpen(false)}}/>
     return (
         <>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -127,8 +120,7 @@ export const Users = () => {
 
                 <Separator/>
                 <Spacer height={theme.sizes.gap3}/>
-                
-                {/*<LoadingFilters/>*/}
+
                 <Filters onGroupBy={setFilters} filtersSelect={filtersSelect} searchForPlaceholder={searchForPlaceholder} onSelect={setIsTable} onSearchedText={setSearchedText} onSortBy={setSortBy} onFiltersBy={setFilterText} />
                 <Spacer height={theme.sizes.gap3}/>
                 {
