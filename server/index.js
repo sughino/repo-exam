@@ -22,7 +22,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL_DEV,
+        origin: process.env.FRONTEND_URL,
         methods: ['POST', 'PUT', 'DELETE'],
         credentials: true
     }
@@ -37,9 +37,7 @@ io.on('connection', (socket) => {
 app.set('io', io);
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-      ? process.env.FRONTEND_URL_PROD
-      : process.env.FRONTEND_URL_DEV,
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, 
@@ -62,7 +60,7 @@ app.use(rateLimit({
 );
 
 app.get('/', (req, res) => {
-    res.redirect(process.env.FRONTEND_URL_DEV);
+    res.redirect(process.env.FRONTEND_URL);
 });
 app.use("/api/general", generalRoutes);
 app.use("/api/auth", authRoutes);
