@@ -25,7 +25,7 @@
   <a href="#license">License</a>
 </p>
 
-![screenshot](/client/public/application_video.gif)
+![screenshot](/client/public/registrazione.gif)
 
 # 🧭 Overview
 This full-stack web application provides a modern, responsive interface and a robust backend infrastructure designed for scalability and performance. Built using **React**, **Node.js**, **MongoDB**, and **Vite**, the project follows a modular architecture and integrates real-time features via **Socket.IO**.
