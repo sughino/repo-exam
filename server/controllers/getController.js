@@ -1,4 +1,4 @@
-import { userColl, personalDataColl, deliveryColl } from "../utils/collections.js";
+import { userColl, itemColl, otherItemColl } from "../utils/collections.js";
 import { maskEmail } from "../utils/maskEmail.js";
 import { ObjectId } from "mongodb";
 import { format } from "date-fns";
@@ -8,13 +8,10 @@ const options = {
 };
 
 export async function getUser(req, res) {
-    const { query, orderBy, sortBy, role } = req.query;
+    const { query, orderBy, sortBy } = req.query;
     const excludeMe = { _id: { $ne: new ObjectId(req.user.userId) } };
     let queryObj = {...excludeMe};
     let sortOptions = {};
-
-    if (role === 'admin') queryObj.admin = true;
-    else if (role === 'user') queryObj.admin = false;
 
     const order = sortBy === 'desc' ? -1 : 1;
     if (orderBy.includes(',')) {
@@ -90,76 +87,213 @@ export async function getUser(req, res) {
     }
 }
 
-
-export async function getPersonalData(req, res) {
+export async function getItem(req, res) {
     const { query, orderBy, sortBy } = req.query;
-    let queryObj = {};
-    let sortOptions = {};
 
-    const order = sortBy === 'desc' ? -1 : 1;
-    sortOptions[orderBy] = order;
+    const userId = new ObjectId(req.user.userId);
+    const filter = { requesterId: userId };
+    const sortOrder = sortBy === "desc" ? -1 : 1;
+    const sortOptions = {};
 
-    const finalOptions = {
-        sort: sortOptions
-    };
-    
-    try {
-        let result = [];
-        
-        if (query) {
-            queryObj.address = { $regex: `^${query}`, $options: 'i' };
-            
-            const nameCursor = await personalDataColl.find(queryObj, finalOptions);
-            for await (const doc of nameCursor) {
-                result.push(doc);
-            }
-        } else {
-            const cursor = await userColl.find({}, finalOptions);
-            for await (const doc of cursor) {
-                result.push(doc);
-            }
+    if (orderBy.includes(',')) {
+        for (const field of orderBy.split(',')) {
+            sortOptions[field] = sortOrder;
         }
+    } else {
+        sortOptions[orderBy] = sortOrder;
+    }
+
+    try {
+        let pipeline = [];
+
+        if (query) {
+            pipeline.push({
+                $match: {
+                    ...filter,
+                    itemDescription: { $regex: query, $options: 'i' }
+                }
+            });
+        } else {
+            pipeline.push({
+                $match: filter
+            });
+        }
+
+        pipeline.push({
+            $lookup: {
+                from: "User",
+                localField: "requesterId",
+                foreignField: "_id",
+                as: "requester"
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: "User",
+                localField: "approverId",
+                foreignField: "_id",
+                as: "approver"
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: "PurchaseCategory",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+            }
+        });
+
+        pipeline.push({
+            $project: {
+                _id: 1,
+                itemDescription: 1,
+                requestDate: 1,
+                approvalDate: 1,
+                status: 1,
+                quantity: 1,
+                unitCost: 1,
+                justification: 1,
+
+                requesterName: { $arrayElemAt: ["$requester.name", 0] },
+                requesterSurname: { $arrayElemAt: ["$requester.surname", 0] },
+                approverName: { $arrayElemAt: ["$approver.name", 0] },
+                approverSurname: { $arrayElemAt: ["$approver.surname", 0] },
+                categoryDescription: { $arrayElemAt: ["$category.description", 0] }
+            }
+        });
         
-        res.status(200).json(result);
-    } catch (error) {
-        console.error('Error querying database:', error);
-        res.status(500).json({ error: 'Database error', message: error.message });
+        pipeline.push({
+            $sort: sortOptions
+        });
+
+        const cursor = itemColl.aggregate(pipeline);
+        const results = [];
+
+        for await (const doc of cursor) {
+            doc.requestDate = format(new Date(doc.requestDate), "yyyy/MM/dd");
+            if (doc.approvalDate) {
+                doc.approvalDate = format(new Date(doc.approvalDate), "yyyy/MM/dd");
+            }
+            results.push(doc);
+        }
+
+        res.status(200).json(results);
+    } catch (err) {
+        console.error("Error fetching purchase requests:", err);
+        res.status(500).json({ error: "Database error", message: err.message });
+    }
+}
+
+export async function getOtherItem(req, res) {
+    const { query, orderBy, sortBy } = req.query;
+
+    const userId = new ObjectId(req.user.userId);
+
+    const baseFilter = {
+        requesterId: { $ne: userId },
+        status: "pending"
+    };
+
+    const sortOrder = sortBy === "desc" ? -1 : 1;
+    const sortOptions = {};
+    for (const field of orderBy.split(",")) {
+        sortOptions[field] = sortOrder;
+    }
+
+    try {
+        let pipeline = [];
+
+        pipeline.push({
+            $match: baseFilter
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: "User",
+                localField: "requesterId",
+                foreignField: "_id",
+                as: "requester"
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: "User",
+                localField: "approverId",
+                foreignField: "_id",
+                as: "approver"
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: "PurchaseCategory",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+            }
+        });
+
+        if (query) {
+            pipeline.push({
+                $match: {
+                    $or: [
+                        { "requester.name": { $regex: query, $options: "i" } },
+                        { "requester.surname": { $regex: query, $options: "i" } }
+                    ]
+                }
+            });
+        }
+
+        pipeline.push({
+            $project: {
+                _id: 1,
+                itemDescription: 1,
+                requestDate: 1,
+                approvalDate: 1,
+                status: 1,
+                quantity: 1,
+                unitCost: 1,
+                justification: 1,
+
+                requesterName: { $arrayElemAt: ["$requester.name", 0] },
+                requesterSurname: { $arrayElemAt: ["$requester.surname", 0] },
+                approverName: { $arrayElemAt: ["$approver.name", 0] },
+                approverSurname: { $arrayElemAt: ["$approver.surname", 0] },
+                categoryDescription: { $arrayElemAt: ["$category.description", 0] }
+            }
+        });
+
+        pipeline.push({ $sort: sortOptions });
+
+        const cursor = itemColl.aggregate(pipeline);
+        const results = [];
+
+        for await (const doc of cursor) {
+            doc.requestDate = format(new Date(doc.requestDate), "yyyy/MM/dd");
+            if (doc.approvalDate) {
+                doc.approvalDate = format(new Date(doc.approvalDate), "yyyy/MM/dd");
+            }
+            results.push(doc);
+        }
+
+        res.status(200).json(results);
+    } catch (err) {
+        console.error("Error fetching pending requests:", err);
+        res.status(500).json({ error: "Database error", message: err.message });
     }
 }
 
 
-export async function getDeliveries(req, res) {
-    const { query, orderBy, sortBy } = req.query;
-    let queryObj = {};
-    let sortOptions = {};
-
-    const order = sortBy === 'desc' ? -1 : 1;
-    sortOptions[orderBy] = order;
-
-    const finalOptions = {
-        sort: sortOptions
-    };
-    
+export async function getCategory(req, res) {
     try {
-        let result = [];
-        
-        if (query) {
-            queryObj.keyDelivery = { $regex: `^${query}`, $options: 'i' };
-            
-            const nameCursor = await deliveryColl.find(queryObj, finalOptions);
-            for await (const doc of nameCursor) {
-                result.push(doc);
-            }
-        } else {
-            const cursor = await userColl.find({}, finalOptions);
-            for await (const doc of cursor) {
-                result.push(doc);
-            }
-        }
-        
-        res.status(200).json(result);
-    } catch (error) {
-        console.error('Error querying database:', error);
-        res.status(500).json({ error: 'Database error', message: error.message });
+        const categories = await otherItemColl.find({}, { projection: { _id: 0 } }).toArray();
+        res.status(200).json(categories);
+    } catch (err) {
+        console.error("Error fetching categories:", err);
+        res.status(500).json({ error: "Database error", message: err.message });
     }
 }

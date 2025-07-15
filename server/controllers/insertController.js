@@ -1,10 +1,10 @@
 import appError from "../utils/appError.js";
 import bcrypt from 'bcrypt';
-import { userColl, personalDataColl, deliveryColl } from "../utils/collections.js";
+import { userColl, itemColl, otherItemColl } from "../utils/collections.js";
 import { userSchema } from "../validations/userSchema.js";
-import { personalDataSchema } from "../validations/personalDataSchema.js";
-import { deliveriesSchema } from "../validations/deliveriesSchema.js";
+import { itemSchema } from "../validations/itemSchema.js"
 import { invalidateCache } from "../middelware/cache.js";
+import { ObjectId } from "mongodb";
 
 export async function insertUser(req, res, next) {
     try {
@@ -59,6 +59,59 @@ export async function insertUser(req, res, next) {
     }
 }
 
+export async function insertItem(req, res, next) {
+    try {
+        const itemData = req.body;
+        const userId = new ObjectId(req.user.userId);
+
+        try {
+            await itemSchema.validate(itemData, { abortEarly: false });
+        } catch (validationError) {
+            return res.status(400).json({
+                status: 'error',
+                errors: validationError.errors
+            });
+        }
+
+        const existingCategory = await otherItemColl.findOne({ description: itemData.category });
+        if (!existingCategory) {
+            return res.status(404).json({
+                status: 'error',
+                data: {},
+                message: 'Category not found',
+                code: 404
+            });
+        }
+
+        await itemColl.insertOne({
+            itemDescription: itemData.description,
+            categoryId: new ObjectId(existingCategory._id),
+            requestDate: new Date(),
+            quantity: parseInt(itemData.quantity, 10),
+            unitCost: parseFloat(itemData.unitCost),
+            justification: itemData.justification,
+            status: "pending",
+            requesterId: userId
+        });
+
+        invalidateCache('item');
+
+        const io = req.app.get('io');
+        io.emit('item');
+
+        res.status(201).json({
+            status: 'success',
+            data: {},
+            message: 'Request inserted successfully',
+            code: 201
+        });
+
+    } catch (error) {
+        console.error(error);
+        return next(new appError('Error inserting request', 500));
+    }
+}
+/*
 export async function insertPersonalData(req, res, next) {
     try {
         const userData = req.body;
@@ -164,4 +217,4 @@ export async function insertDeliveries(req, res, next) {
         console.error(error);
         return next(new appError('Delivery inserting user', 500));
     }
-}
+}*/

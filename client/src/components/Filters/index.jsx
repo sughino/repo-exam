@@ -6,17 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "styled-components";
 import { Skeleton } from '@mui/material';
 
-/*const filters = {
-  Users: ['User id', 'Name & Surname', 'Email', 'Admin'],
-  PersonalData: ['personalDataID', 'email', 'city'],
-  Deliveries: ['deliveryID', 'withdrawalDate', 'deliveryDate', 'State'],
-}
-
-const searchForPlaceholder = {
-  Users: 'Search by name and surname',
-  PersonalData: 'Search by address',
-  Deliveries: 'Search for key delivery',
-}*/
 export const Filters = ({
   filtersSelect,
   searchForPlaceholder,

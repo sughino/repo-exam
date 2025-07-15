@@ -94,15 +94,9 @@ export const Select = ({selectElements, onSelectedItems, inputField = false, res
                 transition={theme.transition.main}
             >
                 {selectElements.map((v, i) => (
-                    <div key={i} className={`select-menu-children ${selectedItems === i ? 'disabled' : ''} ${inputField && i === 0 ? 'disabled-first' : ''} ${inputField ? 'inputField' : ''}`} onClick={() => {
+                    <div key={i} className={`select-menu-children ${selectedItems === i ? 'disabled' : ''}  ${inputField ? 'inputField' : ''}`} onClick={() => {
                         if (selectedItems !== i) {
-                            if (!inputField) {
-                                setSelectedItems(i); onSelectedItems(selectElements[i])
-                            } else {
-                                if (i !== 0) {
-                                    setSelectedItems(i); onSelectedItems(selectElements[i])
-                                }
-                            }
+                            setSelectedItems(i); onSelectedItems(selectElements[i])
                         }
                     }}>
                         <div className="select-menu-children-text-container">

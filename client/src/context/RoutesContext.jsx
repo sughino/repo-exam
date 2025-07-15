@@ -37,21 +37,21 @@ const routeList = Object.freeze([
     loader: <LoadingDataPage />
   },
   {
-    name: 'itemPage',
-    path: '/itemPage',
+    name: 'purchaceRequests',
+    path: '/purchaceRequests',
     component: ItemPage,
     visibleTo: ['user'],
-    icon: 'file',
-    label: 'Item page',
+    icon: 'git-pull-request-arrow',
+    label: 'Purchase requests',
     loader: <LoadingDataPage />
   },
   {
-    name: 'otherItemPage',
-    path: '/otherItemPage',
+    name: 'approveRequests',
+    path: '/approveRequests',
     component: OtherItemPage,
-    visibleTo: ['user'],
-    icon: 'truck',
-    label: 'Other item page',
+    visibleTo: ['admin'],
+    icon: 'signature',
+    label: 'Requests to Approve',
     loader: <LoadingDataPage />
   }
 ]);

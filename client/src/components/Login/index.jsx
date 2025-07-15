@@ -78,7 +78,6 @@ export const Login = ({isOpen, onCancel}) => {
         const result = await verifyLogin(formData);
         if (result.success) {
             setLocalError(false);
-            console.log(result.response.data)
             setUser(result.response.data);
             handleBack();
         }

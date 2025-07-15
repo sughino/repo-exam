@@ -1,6 +1,6 @@
 import appError from "../utils/appError.js";
 import { ObjectId } from 'mongodb';
-import { userColl, personalDataColl, deliveryColl } from "../utils/collections.js";
+import { userColl, itemColl, otherItemColl } from "../utils/collections.js";
 import { invalidateCache } from "../middelware/cache.js";
 
 export async function deleteUser(req, res, next) {
@@ -36,7 +36,39 @@ export async function deleteUser(req, res, next) {
     }
 }
 
-export async function deletePersonalData(req, res, next) {
+export async function deleteItem(req, res, next) {
+    try {  
+        const itemData = req.body;
+
+        try {
+            await itemColl.deleteOne({ _id: new ObjectId(itemData._id)});
+        } catch (error) {
+            return res.status(404).json({
+                status: 'error',
+                data: {},
+                message: 'Request not found',
+                code: 404
+            });
+        }
+
+        invalidateCache('item');
+
+        const io = req.app.get('io');
+        io.emit('item');
+
+        res.status(201).json({
+            status: 'success',
+            data: {},
+            message: 'Request deleted successfully',
+            code: 201
+        });
+        
+    } catch (error) {
+        console.error(error);
+        return next(new appError('Error deleting user', 500));
+    }
+}
+/*export async function deletePersonalData(req, res, next) {
     try {
         const serialBody = req.body.id;
         const existingSerial = await personalDataColl.findOne({ email: serialBody });
@@ -100,4 +132,4 @@ export async function deleteDalivery(req, res, next) {
         console.error(error);
         return next(new appError('Error deleting delivery', 500));
     }
-}
+}*/

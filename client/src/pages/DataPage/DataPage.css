@@ -40,6 +40,10 @@
     text-overflow: ellipsis;
 }
 
+.title-wrap {
+    text-wrap: wrap;
+}
+
 @media (min-width:1000px) {
     .data-container.card {
         display: grid;

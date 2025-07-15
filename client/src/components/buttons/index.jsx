@@ -84,6 +84,13 @@ const variantStyles = {
         color: theme.colors.warning,
         border: 'solid 2px',
         borderColor: theme.colors.warning
+    }),
+    success: (theme, isHovered) => ({
+        ...baseStyle,
+        backgroundColor: isHovered ? theme.colors.success10 : 'transparent',
+        color: theme.colors.success,
+        border: 'solid 2px',
+        borderColor: theme.colors.success
     })
 };
 

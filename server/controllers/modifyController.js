@@ -1,10 +1,8 @@
 import appError from "../utils/appError.js";
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
-import { userColl, personalDataColl, deliveryColl } from "../utils/collections.js";
+import { userColl, itemColl, otherItemColl } from "../utils/collections.js";
 import { modifingUserSchema, modifingPasswordUserSchema, userSchema } from "../validations/userSchema.js";
-import { personalDataSchema } from "../validations/personalDataSchema.js";
-import { deliveriesSchema } from "../validations/deliveriesSchema.js";
 import { invalidateCache } from "../middelware/cache.js";
 
 export async function modifyUser(req, res, next) {
@@ -101,6 +99,101 @@ export async function modifyUser(req, res, next) {
     }
 }
 
+export async function modifyItem(req, res, next) {
+    try {
+        const itemData = req.body;
+        const userId = new ObjectId(req.user.userId);
+
+        try {
+            await itemSchema.validate(itemData, { abortEarly: false });
+        } catch (validationError) {
+            return res.status(400).json({
+                status: 'error',
+                errors: validationError.errors
+            });
+        }
+
+        const existingCategory = await otherItemColl.findOne({ description: itemData.category });
+        if (!existingCategory) {
+            return res.status(404).json({
+                status: 'error',
+                data: {},
+                message: 'Category not found',
+                code: 404
+            });
+        }
+
+        const result = await itemColl.updateOne(
+            { _id: new ObjectId(requestId) },
+            {
+                $set: {
+                    itemDescription: itemData.description,
+                    categoryId: new ObjectId(existingCategory._id),
+                    quantity: parseInt(itemData.quantity, 10),
+                    unitCost: parseFloat(itemData.unitCost),
+                    justification: itemData.justification,
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Request not found" });
+        }
+
+        invalidateCache('item');
+
+        const io = req.app.get('io');
+        io.emit('item');
+
+        res.status(201).json({
+            status: 'success',
+            data: {},
+            message: 'Request inserted successfully',
+            code: 201
+        });
+
+    } catch (error) {
+        console.error(error);
+        return next(new appError('Error inserting request', 500));
+    }
+}
+
+export async function modifyOtherItem(req, res, next) {
+    try {
+        const approverId = new ObjectId(req.user.userId);
+        const { requestId, newStatus } = req.body;
+
+        if (!requestId || !newStatus || !["approved", "rejected"].includes(newStatus)) {
+            return res.status(400).json({ error: "Invalid input" });
+        }
+
+        const result = await itemColl.updateOne(
+            { _id: new ObjectId(requestId) },
+            {
+                $set: {
+                    status: newStatus,
+                    approvalDate: new Date(),
+                    approverId: approverId
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Request not found" });
+        }
+
+        invalidateCache('otherItem');
+
+        const io = req.app.get('io');
+        io.emit('otherItem');
+
+        res.status(200).json({ message: "Request status updated successfully" });
+    } catch (err) {
+        console.error("Error updating request status:", err);
+        res.status(500).json({ error: "Database error", message: err.message });
+    }
+}
+/*
 export async function modifyPersonalData(req, res, next) {
     try {
         const userData = req.body;
@@ -151,7 +244,7 @@ export async function modifyPersonalData(req, res, next) {
             }
         )
 
-        invalidateCache('personalData');
+        //!invalidateCache('personalData');
 
         const io = req.app.get('io');
         io.emit('personalData-item');
@@ -223,4 +316,4 @@ export async function modifyDelivery(req, res, next) {
         console.error(error);
         return next(new appError('Error inserting user', 500));
     }
-}
+}*/

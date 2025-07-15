@@ -42,6 +42,19 @@
 .hero-form-text {
     padding-left: 10px;
 }
+
+.hero-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-inline: 50px;
+}
+.hero-button-container {
+    display: flex;
+    gap: var(--gap-2);
+}
+
 @media (min-width:600px) {
     .hero-container{
         width: 80vw;

@@ -8,7 +8,7 @@ import helmet from "helmet";
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import errorHandler from "./utils/errorHandler.js";
-import generalRoutes from "./routes/generalRoutes.js";
+//import generalRoutes from "./routes/generalRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import getRoutes from "./routes/getRoutes.js";
 import insertRoutes from "./routes/insertRoutes.js";
@@ -65,7 +65,7 @@ app.use(rateLimit({
 app.get('/', (req, res) => {
     res.redirect(FRONTEND_URL);
 });
-app.use("/api/general", generalRoutes);
+//app.use("/api/general", generalRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/get", checkAuth, getRoutes);
 app.use("/api/insert", checkAuth, insertRoutes);

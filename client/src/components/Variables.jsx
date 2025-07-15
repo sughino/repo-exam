@@ -31,6 +31,9 @@ export const Theme = {
     success10: 'rgb(5, 242, 210, .1)',
     successHover: '#20FADD',
 
+    waiting: '#fdc500',
+    waiting10: 'rgba(253, 197, 0, .1)',
+
     border: '#191919'
   },
   sizes:  {

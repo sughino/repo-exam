@@ -1,5 +1,5 @@
 import conn from "../services/connection.js";
 
-export const deliveryColl = conn.collection("Delivery");
-export const personalDataColl = conn.collection("PersonalData");
+export const itemColl = conn.collection("PurchaseRequest");
+export const otherItemColl = conn.collection("PurchaseCategory");
 export const userColl = conn.collection("User");
