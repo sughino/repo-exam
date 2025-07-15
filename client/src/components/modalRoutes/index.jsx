@@ -94,6 +94,10 @@ export const FloatingModalRoutes = ({ routes, user, openLoginModal, isOpen, clos
             scale: 0.8,
         }
     }
+
+    const goToRepo = () => {
+        window.open('https://github.com/sughino/repo-exam', '_blank');
+    };
     
     return (
         <motion.div 
@@ -156,7 +160,7 @@ export const FloatingModalRoutes = ({ routes, user, openLoginModal, isOpen, clos
 
                 <div className="modal-routes-link-wrapper">
                     <Text variant={'body2'} color={theme.colors.white50}>Other</Text>
-                    <LinkGithub/>
+                    <LinkGithub onClick={goToRepo}/>
                 </div>
             </div>
         </motion.div>

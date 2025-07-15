@@ -16,6 +16,10 @@ export const Landing = () => {
         navigate('/search');
     };
 
+    const goToRepo = () => {
+        window.open('https://github.com/sughino/repo-exam', '_blank');
+    };
+
     return (
         <div className="landing-wrapper">
             <FadeIn>
@@ -38,7 +42,7 @@ export const Landing = () => {
                         In this site you will find my exam, a project that reflects my learning journey and
                         my passion for creating innovative web applications.</Text>
                     <div className='animated-landing-button-container'>
-                        <Button icon={'end'} iconName={'github'} size={'regular'} variant={'accent'} onClick={goToExam}>Go to folder</Button>
+                        <Button icon={'end'} iconName={'github'} size={'regular'} variant={'accent'} onClick={goToRepo}>Go to folder</Button>
                         <Button icon={'end'} iconName={'chevron-right'} size={'regular'} variant={'primary'} onClick={goToExam}>Go to exam</Button>
                     </div>
                 </div>
