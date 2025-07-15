@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const api = axios.create({
-    baseURL: 'https://repo-exam-server.vercel.app/api',
+    baseURL: apiUrl,
     withCredentials: true,
 });
 

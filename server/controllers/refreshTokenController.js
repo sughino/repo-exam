@@ -4,6 +4,8 @@ import appError from "../utils/appError.js";
 import { generateToken } from '../utils/generateToken.js';
 import { maskEmail } from '../utils/maskEmail.js';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 export async function refreshToken(req, res) {
     try {
         const refreshToken = req.cookies.refreshToken;
@@ -39,8 +41,8 @@ export async function refreshToken(req, res) {
             const newToken = generateToken(user);
             res.cookie('token', newToken, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'None',
+                secure: isProd,
+                sameSite: isProd ? 'None' : 'Lax',
                 maxAge: 1000 * 60 * 30,
             });
 

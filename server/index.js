@@ -20,6 +20,9 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const server = http.createServer(app);
 
+const isProd = process.env.NODE_ENV === 'production';
+const FRONTEND_URL = isProd ? process.env.FRONTEND_URL_PRODUCTION : process.env.FRONTEND_URL_DEV;
+
 const io = new Server(server, {
     cors: {
         origin: process.env.FRONTEND_URL_DEV,
@@ -37,7 +40,7 @@ io.on('connection', (socket) => {
 app.set('io', io);
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL_DEV,
+    origin: FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, 
@@ -60,7 +63,7 @@ app.use(rateLimit({
 );
 
 app.get('/', (req, res) => {
-    res.redirect(process.env.FRONTEND_URL_DEV);
+    res.redirect(FRONTEND_URL);
 });
 app.use("/api/general", generalRoutes);
 app.use("/api/auth", authRoutes);

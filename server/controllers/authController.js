@@ -6,6 +6,8 @@ import { userSchema } from "../validations/userSchema.js";
 import { maskEmail } from "../utils/maskEmail.js";
 import { format } from "date-fns";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 export async function login(req, res, next) {
     try {
         const userData = req.body;
@@ -39,16 +41,16 @@ export async function login(req, res, next) {
         const token = generateToken(tokenPayload);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 1000 * 60 * 30,
         });
 
         const refreshToken = generateRefreshToken(tokenPayload, userData.remainConnected);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: userData.remainConnected ? 1000 * 60 * 60 * 24 * 30 : 1000 * 60 * 60 * 30,
         });
 
@@ -116,15 +118,15 @@ export async function register(req, res, next) {
         const token = generateToken(tokenPayload);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 1000 * 60 * 60 * 24
         });
         const refreshToken = generateRefreshToken(tokenPayload, false);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 1000 * 60 * 60 * 30,
         });
 
